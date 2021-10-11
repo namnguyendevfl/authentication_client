@@ -1,24 +1,68 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Home from "./home";
+import Login from "./login";
+import { Switch, Route } from "react-router-dom";
+import Signup from "./signup";
+import { useHistory } from "react-router-dom";
 
 function App() {
+  const [home, setHome] = useState(null);
+  // const [login, setLogin] = useState(true);
+  const [error, setError] = useState(null);
+
+  const handleLogin = () => {
+    setHome(() => true);
+  };
+
+  const handleLogout = () => {
+    setHome(() => false);
+  };
+
+  const history = useHistory();
+
+  const handleSignup = () => {
+    history.push("/accounts/signup");
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+    <Switch>
+      <Route exact path = "/">
+        <div>
+          {
+            home
+            ? <>
+              <Home />
+                <div>    
+                  <button onClick = {handleLogout}>
+                      Logout
+                  </button>
+                </div>
+              </>
+            : <>
+                <Login setHome = {setHome}/>
+                <div>    
+                  <button onClick = {handleLogin}>
+                      Login
+                  </button>
+                </div>
+              </>
+          }
+
+          <hr/>
+          <div>
+            <button onClick = {handleSignup}>
+              Signup
+            </button>
+          </div>
+        </div>
+      </Route>
+      <Route path = "/accounts/signup">
+        <Signup setHome = {setHome}/>
+      </Route>
+    </Switch>
+
+    </>
   );
 }
 
